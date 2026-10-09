@@ -5,6 +5,7 @@ import { createAuth } from "./auth";
 import { createDb, products } from "./db";
 import type { Env } from "./env";
 import { adminRoutes } from "./routes/admin";
+import { cartRoutes } from "./routes/cart";
 import { meRoutes } from "./routes/me";
 import { productRoutes } from "./routes/products";
 
@@ -32,6 +33,7 @@ app.get("/health/db", async (c) => {
 });
 
 app.route("/products", productRoutes);
+app.route("/cart", cartRoutes);
 app.route("/me", meRoutes);
 app.route("/admin", adminRoutes);
 

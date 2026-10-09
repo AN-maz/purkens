@@ -155,3 +155,41 @@ export const verifications = sqliteTable(
   },
   (table) => [index("verifications_identifier_idx").on(table.identifier)],
 );
+
+// --- Cart (1 user = 1 cart, 1 cart = N item) ---
+// Harga TIDAK disimpan di cart_items; selalu dihitung dari product_prices saat dibaca.
+
+export const carts = sqliteTable("carts", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("user_id")
+    .notNull()
+    .unique()
+    .references(() => users.id, { onDelete: "cascade" }),
+  ...timestamps,
+});
+
+export const cartItems = sqliteTable(
+  "cart_items",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    cartId: text("cart_id")
+      .notNull()
+      .references(() => carts.id, { onDelete: "cascade" }),
+    productId: text("product_id")
+      .notNull()
+      .references(() => products.id, { onDelete: "cascade" }),
+    quantity: integer("quantity").notNull().default(1),
+    ...timestamps,
+  },
+  (table) => [
+    uniqueIndex("cart_items_cart_product_uniq").on(
+      table.cartId,
+      table.productId,
+    ),
+    index("cart_items_cart_id_idx").on(table.cartId),
+  ],
+);
