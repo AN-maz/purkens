@@ -193,3 +193,34 @@ export const cartItems = sqliteTable(
     index("cart_items_cart_id_idx").on(table.cartId),
   ],
 );
+
+// --- Addresses (1 user = N alamat; hanya satu default per user) ---
+
+export const addresses = sqliteTable(
+  "addresses",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    label: text("label").notNull(),
+    recipientName: text("recipient_name").notNull(),
+    phone: text("phone").notNull(),
+    addressLine: text("address_line").notNull(),
+    city: text("city").notNull(),
+    province: text("province").notNull(),
+    postalCode: text("postal_code").notNull(),
+    country: text("country").notNull(),
+    countryCode: text("country_code").notNull(),
+    isDefault: integer("is_default", { mode: "boolean" })
+      .notNull()
+      .default(false),
+    ...timestamps,
+  },
+  (table) => [
+    index("addresses_user_id_idx").on(table.userId),
+    index("addresses_user_default_idx").on(table.userId, table.isDefault),
+  ],
+);
