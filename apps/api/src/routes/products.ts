@@ -1,17 +1,8 @@
 import { Hono } from "hono";
 import { and, asc, eq } from "drizzle-orm";
 import { createDb, productImages, productPrices, products } from "../db";
+import { parseCurrency } from "../lib/currency";
 import type { Env } from "../env";
-
-const CURRENCIES = ["IDR", "USD"] as const;
-type Currency = (typeof CURRENCIES)[number];
-
-function parseCurrency(value: string | undefined): Currency | null {
-  const currency = (value ?? "IDR").toUpperCase();
-  return CURRENCIES.includes(currency as Currency)
-    ? (currency as Currency)
-    : null;
-}
 
 export const productRoutes = new Hono<{ Bindings: Env }>();
 

@@ -27,6 +27,7 @@ bukens/
 │   │   │   │   ├── products.ts # GET /products, GET /products/:slug
 │   │   │   │   ├── cart.ts     # GET /cart, POST/PATCH/DELETE /cart/items
 │   │   │   │   ├── addresses.ts # CRUD /addresses
+│   │   │   │   ├── orders.ts    # POST /checkout, GET /orders, GET /orders/:id
 │   │   │   │   ├── me.ts       # GET /me
 │   │   │   │   └── admin.ts    # GET /admin/ping (uji admin)
 │   │   │   └── db/
@@ -121,6 +122,7 @@ npm run db:seed:admin:local  # isi akun admin contoh ke D1 lokal
 | 5    | Cart                   | ✅      |
 | 6    | Address                | ✅      |
 | 7    | Frontend toko          | ✅      |
+| 8    | Checkout & Order       | ✅      |
 | ...  | (lihat IMPLEMENTATION) | ⬜      |
 
 ---
@@ -147,8 +149,11 @@ npm run db:seed:admin:local  # isi akun admin contoh ke D1 lokal
 | POST     | `/addresses`        | buat alamat (alamat pertama otomatis default)  |
 | PATCH    | `/addresses/:id`    | ubah alamat / jadikan default                  |
 | DELETE   | `/addresses/:id`    | hapus alamat                                   |
+| POST     | `/checkout`         | buat order dari cart (`{addressId, currency}`); validasi + stok atomik + kosongkan cart |
+| GET      | `/orders`           | daftar order milik user                        |
+| GET      | `/orders/:id`       | detail order milik user (order user lain → 404)|
 
-> Semua endpoint `/cart*` dan `/addresses*` butuh session (login) dan hanya menyentuh data milik user sendiri.
+> Semua endpoint `/cart*`, `/addresses*`, `/checkout`, dan `/orders*` butuh session (login) dan hanya menyentuh data milik user sendiri. Harga & alamat order disimpan sebagai snapshot (`order_items.unit_price`, `orders.shipping_address_snapshot`) sehingga tidak berubah walau produk/alamat diubah. `total` dari client diabaikan.
 
 ### Akun contoh (seed lokal)
 

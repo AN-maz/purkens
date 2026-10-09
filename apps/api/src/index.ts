@@ -8,6 +8,7 @@ import { addressRoutes } from "./routes/addresses";
 import { adminRoutes } from "./routes/admin";
 import { cartRoutes } from "./routes/cart";
 import { meRoutes } from "./routes/me";
+import { checkoutRoutes, orderRoutes } from "./routes/orders";
 import { productRoutes } from "./routes/products";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -40,6 +41,8 @@ app.get("/health/db", async (c) => {
 
 app.route("/products", productRoutes);
 app.route("/cart", cartRoutes);
+app.route("/checkout", checkoutRoutes);
+app.route("/orders", orderRoutes);
 app.route("/addresses", addressRoutes);
 app.route("/me", meRoutes);
 app.route("/admin", adminRoutes);

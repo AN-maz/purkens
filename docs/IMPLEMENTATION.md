@@ -273,31 +273,31 @@ bukens/
 
 **Tugas:**
 
-- [ ] Tambah tabel `orders` + `order_items`.
-- [ ] `orders.shipping_address_snapshot` (JSON) — snapshot alamat saat checkout.
-- [ ] `order_items`: simpan `product_name`, `unit_price`, `quantity`, `subtotal` (snapshot).
-- [ ] `POST /checkout` dengan urutan validasi:
-  - [ ] sudah login?
-  - [ ] cart tidak kosong?
-  - [ ] produk masih ada & ACTIVE?
-  - [ ] stok cukup?
-  - [ ] currency valid?
-  - [ ] alamat valid & milik user?
-- [ ] Hitung subtotal + shipping + tax + total **di backend**.
-- [ ] Simpan order + order_items dalam transaksi.
-- [ ] Kurangi stok **aman dari race condition** (cek & update atomik).
-- [ ] Kosongkan cart setelah order dibuat.
-- [ ] `GET /orders` & `GET /orders/:id` (hanya milik user).
-- [ ] Buat `order_number` unik (mis. `BK-0001`).
-- [ ] Order awal berstatus `PENDING_PAYMENT`.
+- [x] Tambah tabel `orders` + `order_items`.
+- [x] `orders.shipping_address_snapshot` (JSON) — snapshot alamat saat checkout.
+- [x] `order_items`: simpan `product_name`, `unit_price`, `quantity`, `subtotal` (snapshot).
+- [x] `POST /checkout` dengan urutan validasi:
+  - [x] sudah login?
+  - [x] cart tidak kosong?
+  - [x] produk masih ada & ACTIVE?
+  - [x] stok cukup?
+  - [x] currency valid?
+  - [x] alamat valid & milik user?
+- [x] Hitung subtotal + shipping + tax + total **di backend**.
+- [x] Simpan order + order_items dalam transaksi.
+- [x] Kurangi stok **aman dari race condition** (cek & update atomik).
+- [x] Kosongkan cart setelah order dibuat.
+- [x] `GET /orders` & `GET /orders/:id` (hanya milik user).
+- [x] Buat `order_number` unik (mis. `BK-0001`).
+- [x] Order awal berstatus `PENDING_PAYMENT`.
 
 **Checkpoint:**
 
-- [ ] Checkout berhasil membuat order dengan snapshot harga yang benar.
-- [ ] Ubah harga produk → order lama **tidak berubah**.
-- [ ] Stok berkurang tepat sesuai kuantitas.
-- [ ] User tidak bisa buka order user lain.
-- [ ] Client yang mengirim `total` palsu tetap diabaikan.
+- [x] Checkout berhasil membuat order dengan snapshot harga yang benar.
+- [x] Ubah harga produk → order lama **tidak berubah**.
+- [x] Stok berkurang tepat sesuai kuantitas.
+- [x] User tidak bisa buka order user lain.
+- [x] Client yang mengirim `total` palsu tetap diabaikan.
 
 **Belajar:** database transaction, snapshot, race condition (atomic update), validasi berlapis.
 
