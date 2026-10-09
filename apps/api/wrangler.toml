@@ -1,6 +1,7 @@
 name = "bukens-api"
 main = "src/index.ts"
 compatibility_date = "2026-10-09"
+compatibility_flags = ["nodejs_compat"]
 
 [[d1_databases]]
 binding = "DB"

@@ -1,10 +1,23 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { sql } from "drizzle-orm";
+import { createAuth } from "./auth";
 import { createDb, products } from "./db";
 import type { Env } from "./env";
+import { adminRoutes } from "./routes/admin";
+import { meRoutes } from "./routes/me";
 import { productRoutes } from "./routes/products";
 
 const app = new Hono<{ Bindings: Env }>();
+
+// Better Auth handler (register, login, logout, session) di /api/auth/*
+app.use("/api/auth/*", (c, next) =>
+  cors({
+    origin: (origin) => origin,
+    credentials: true,
+  })(c, next),
+);
+app.all("/api/auth/*", (c) => createAuth(c.env).handler(c.req.raw));
 
 app.get("/health", (c) => {
   return c.json({ status: "ok" });
@@ -19,5 +32,7 @@ app.get("/health/db", async (c) => {
 });
 
 app.route("/products", productRoutes);
+app.route("/me", meRoutes);
+app.route("/admin", adminRoutes);
 
 export default app;
