@@ -25,7 +25,7 @@ INSERT INTO product_prices (id, product_id, currency, amount) VALUES
   ('price-discontinued-usd', 'carpet-discontinued', 'USD', 3000);
 
 INSERT INTO product_images (id, product_id, url, sort_order) VALUES
-  ('img-persian-1', 'carpet-persian', 'https://placehold.co/800x600?text=Karpet+Persian', 0),
-  ('img-turki-1',   'carpet-turki',   'https://placehold.co/800x600?text=Karpet+Turki',   0),
-  ('img-shaggy-1',  'carpet-shaggy',  'https://placehold.co/800x600?text=Karpet+Shaggy',  0),
-  ('img-kilim-1',   'carpet-kilim',   'https://placehold.co/800x600?text=Karpet+Kilim',   0);
+  ('img-persian-1', 'carpet-persian', 'https://placehold.co/800x600.png?text=Karpet+Persian', 0),
+  ('img-turki-1',   'carpet-turki',   'https://placehold.co/800x600.png?text=Karpet+Turki',   0),
+  ('img-shaggy-1',  'carpet-shaggy',  'https://placehold.co/800x600.png?text=Karpet+Shaggy',  0),
+  ('img-kilim-1',   'carpet-kilim',   'https://placehold.co/800x600.png?text=Karpet+Kilim',   0);

@@ -124,23 +124,23 @@ bukens/
 
 **Tugas:**
 
-- [ ] Buat database D1 lokal: `wrangler d1 create bukens-db` (lalu bind di `wrangler.toml`).
-- [ ] Install `drizzle-orm` dan `drizzle-kit`.
-- [ ] Definisikan tabel **inti bertahap** (jangan semua sekaligus):
-  - [ ] `products`
-  - [ ] `product_prices`
-  - [ ] `product_images`
-- [ ] Terapkan aturan uang: `amount` = **INTEGER** (IDR utuh, USD dalam cents).
-- [ ] Buat constraint `UNIQUE(product_id, currency)` di `product_prices`.
-- [ ] Buat index minimal: `products.slug`, `products.status`.
-- [ ] Generate + jalankan migration ke D1 lokal.
-- [ ] Buat file `seed.ts` → isi 3–5 produk contoh (IDR + USD).
-- [ ] Buat helper koneksi `db` yang menerima `c.env.DB`.
+- [x] Buat database D1 lokal: `wrangler d1 create bukens-db` (lalu bind di `wrangler.toml`). → id `63631017-...`
+- [x] Install `drizzle-orm` dan `drizzle-kit`.
+- [x] Definisikan tabel **inti bertahap** (jangan semua sekaligus):
+  - [x] `products`
+  - [x] `product_prices`
+  - [x] `product_images`
+- [x] Terapkan aturan uang: `amount` = **INTEGER** (IDR utuh, USD dalam cents).
+- [x] Buat constraint `UNIQUE(product_id, currency)` di `product_prices`.
+- [x] Buat index minimal: `products.slug`, `products.status`.
+- [x] Generate + jalankan migration ke D1 lokal.
+- [x] Buat file seed → isi 4 produk contoh (IDR + USD). → `seed.sql` (pakai `wrangler d1 execute --file`, lebih sederhana dari runner TS).
+- [x] Buat helper koneksi `db` yang menerima `c.env.DB`.
 
 **Checkpoint:**
 
-- [ ] Query produk dari D1 lewat Drizzle berhasil mengembalikan data seed.
-- [ ] `UNIQUE(product_id, currency)` benar-benar menolak duplikat.
+- [x] Query produk dari D1 lewat Drizzle berhasil mengembalikan data seed. → `/health/db` → `{"products":4}`
+- [x] `UNIQUE(product_id, currency)` benar-benar menolak duplikat.
 
 **Belajar:** SQL dasar (SELECT/INSERT/JOIN), migration, index, foreign key, kenapa integer untuk uang.
 
@@ -154,18 +154,18 @@ bukens/
 
 **Tugas:**
 
-- [ ] `GET /products` → daftar produk **ACTIVE** saja, dengan harga sesuai `?currency=IDR|USD`.
-- [ ] `GET /products/:slug` → detail produk + semua gambarnya.
-- [ ] Validasi query `currency` (default `IDR`).
-- [ ] Produk `INACTIVE` tidak boleh muncul.
-- [ ] Format response konsisten: `{ "data": ... }` atau `{ "error": ... }`.
-- [ ] Tangani error: produk tidak ditemukan → `404`.
+- [x] `GET /products` → daftar produk **ACTIVE** saja, dengan harga sesuai `?currency=IDR|USD`.
+- [x] `GET /products/:slug` → detail produk + semua gambarnya.
+- [x] Validasi query `currency` (default `IDR`).
+- [x] Produk `INACTIVE` tidak boleh muncul.
+- [x] Format response konsisten: `{ "data": ... }` atau `{ "error": ... }`.
+- [x] Tangani error: produk tidak ditemukan → `404`.
 
 **Checkpoint:**
 
-- [ ] `GET /products` menampilkan hasil seed.
-- [ ] `GET /products/:slug` benar; slug aneh → `404`.
-- [ ] `?currency=USD` menampilkan harga USD.
+- [x] `GET /products` menampilkan hasil seed.
+- [x] `GET /products/:slug` benar; slug aneh → `404`.
+- [x] `?currency=USD` menampilkan harga USD.
 
 **Belajar:** HTTP method & status code, query param, validasi input sederhana.
 
@@ -177,19 +177,20 @@ bukens/
 
 **Tugas:**
 
-- [ ] Install & konfigurasi **Better Auth** (D1 sebagai storage).
-- [ ] Generate tabel auth Better Auth (`users`, `sessions`, `accounts`, `verifications`) — **jangan desain manual**, ikuti schema-nya.
-- [ ] Tambahkan kolom `role` (`CUSTOMER` / `ADMIN`) di `users`.
-- [ ] Endpoint: register, login, logout, `GET /me`.
-- [ ] Buat **middleware auth** di Hono → tempel `user` ke context kalau session valid.
-- [ ] Buat **middleware admin** → cek `role === 'ADMIN'`.
-- [ ] Seed 1 akun admin.
+- [x] Install & konfigurasi **Better Auth** (D1 sebagai storage). → `better-auth@1.7.7` + `drizzleAdapter` (`sqlite`, `usePlural: true`, `transaction: false`).
+- [x] Generate tabel auth Better Auth (`users`, `sessions`, `accounts`, `verifications`) — **jangan desain manual**, ikuti schema-nya. → tabel ditulis di `src/db/schema.ts` mengikuti schema inti Better Auth (untuk drizzle adapter), migration `0001_zippy_hitman.sql`.
+- [x] Tambahkan kolom `role` (`CUSTOMER` / `ADMIN`) di `users`. → `additionalFields.role`, `input: false`, default `CUSTOMER`.
+- [x] Endpoint: register, login, logout, `GET /me`. → `/api/auth/*` (handler Better Auth) + `GET /me`.
+- [x] Buat **middleware auth** di Hono → tempel `user` ke context kalau session valid. → `src/middleware/auth.ts` (`requireAuth`).
+- [x] Buat **middleware admin** → cek `role === 'ADMIN'`. → `requireAdmin` + `GET /admin/ping` uji.
+- [x] Seed 1 akun admin. → `seed-admin.sql` (`admin@bukens.test` / `admin123456`).
 
 **Checkpoint:**
 
-- [ ] Register → login → `GET /me` mengembalikan user yang benar.
-- [ ] Akses route yang butuh login tanpa session → `401`.
-- [ ] Login pakai akun customer ke route admin → `403`.
+- [x] Register → login → `GET /me` mengembalikan user yang benar.
+- [x] Akses route yang butuh login tanpa session → `401`.
+- [x] Login pakai akun customer ke route admin → `403`.
+- [x] Bonus: admin ke `GET /admin/ping` → `200`; `/products` tetap `200`.
 
 **Belajar:** cookie/session, hashing password (dihandle library), middleware, authorization vs authentication.
 
@@ -203,19 +204,19 @@ bukens/
 
 **Tugas:**
 
-- [ ] Tambah tabel `carts` (1 user = 1 cart) dan `cart_items` (+ `UNIQUE(cart_id, product_id)`).
-- [ ] `GET /cart` → isi cart + subtotal (dihitung dari harga backend).
-- [ ] `POST /cart/items` → tambah produk (upsert quantity).
-- [ ] `PATCH /cart/items/:id` → ubah quantity.
-- [ ] `DELETE /cart/items/:id` → hapus item.
-- [ ] Pastikan user hanya bisa menyentuh **cart miliknya** (cek `user_id`).
-- [ ] Tolak menambah produk `INACTIVE`.
+- [x] Tambah tabel `carts` (1 user = 1 cart) dan `cart_items` (+ `UNIQUE(cart_id, product_id)`). → migration `0002_fine_junta.sql`.
+- [x] `GET /cart` → isi cart + subtotal (dihitung dari harga backend). → `?currency=IDR|USD`, subtotal dihitung dari `product_prices`.
+- [x] `POST /cart/items` → tambah produk (upsert quantity).
+- [x] `PATCH /cart/items/:id` → ubah quantity.
+- [x] `DELETE /cart/items/:id` → hapus item.
+- [x] Pastikan user hanya bisa menyentuh **cart miliknya** (cek `user_id`). → join `cart_items → carts` + `carts.userId`.
+- [x] Tolak menambah produk `INACTIVE`. → `400`; produk tak ada → `404`.
 
 **Checkpoint:**
 
-- [ ] User A tidak bisa melihat/mengubah cart User B.
-- [ ] Tambah produk yang sama dua kali → quantity menumpuk, bukan jadi 2 baris.
-- [ ] Subtotal cocok dengan perhitungan manual.
+- [x] User A tidak bisa melihat/mengubah cart User B. → B lihat cart kosong; B PATCH/DELETE item A → `404`.
+- [x] Tambah produk yang sama dua kali → quantity menumpuk, bukan jadi 2 baris.
+- [x] Subtotal cocok dengan perhitungan manual. → 3×750.000 + 1×450.000 = `2.700.000`; USD 2×7.500+4.500 = `12.000`.
 
 **Belajar:** relasi 1:1 dan 1:N, upsert, otorisasi kepemilikan data.
 
@@ -227,16 +228,16 @@ bukens/
 
 **Tugas:**
 
-- [ ] Tabel `addresses` (FK ke `users`).
-- [ ] CRUD: `GET`, `POST`, `PATCH`, `DELETE /addresses`.
-- [ ] Field: label, recipient, phone, country, country_code, province, city, postal_code, address_line.
-- [ ] Dukung `is_default` (hanya satu default per user).
-- [ ] Batasi akses hanya ke alamat milik sendiri.
+- [x] Tabel `addresses` (FK ke `users`). → migration `0003_needy_bucky.sql`.
+- [x] CRUD: `GET`, `POST`, `PATCH`, `DELETE /addresses`. → `src/routes/addresses.ts`.
+- [x] Field: label, recipient (→ `recipientName`), phone, country, country_code, province, city, postal_code, address_line. → plus `countryCode` dinormalkan ke HURUF BESAR.
+- [x] Dukung `is_default` (hanya satu default per user). → alamat pertama otomatis default; set default baru otomatis menurunkan yang lama.
+- [x] Batasi akses hanya ke alamat milik sendiri. → semua query difilter `user_id`.
 
 **Checkpoint:**
 
-- [ ] User bisa menyimpan minimal 2 alamat.
-- [ ] User tidak bisa mengakses alamat user lain.
+- [x] User bisa menyimpan minimal 2 alamat. → `GET /addresses` mengembalikan 2 alamat, tepat satu default.
+- [x] User tidak bisa mengakses alamat user lain. → B `GET` kosong; B `PATCH`/`DELETE` alamat A → `404`.
 
 **Belajar:** CRUD lengkap, validasi field, aturan "satu default".
 
@@ -248,16 +249,17 @@ bukens/
 
 **Tugas:**
 
-- [ ] Buat `apps/web` (Next.js) + Tailwind.
-- [ ] Halaman: `/`, `/products`, `/products/:slug`, `/cart`, `/login`, `/register`.
-- [ ] Tampilkan pilihan currency IDR/USD (harga dari API, bukan hitung sendiri).
-- [ ] Tombol "Add to cart" memanggil API.
-- [ ] Setelah login, tampilkan menu akun.
+- [x] Buat `apps/web` (Next.js) + Tailwind. → Next.js 16.4 (App Router) + React 19 + Tailwind v4.
+- [x] Halaman: `/`, `/products`, `/products/:slug`, `/cart`, `/login`, `/register`.
+- [x] Tampilkan pilihan currency IDR/USD (harga dari API, bukan hitung sendiri). → toggle di navbar, tersimpan di `localStorage`.
+- [x] Tombol "Add to cart" memanggil API. → `POST /cart/items`; belum login → diarahkan ke `/login`.
+- [x] Setelah login, tampilkan menu akun. → nama user + tombol Keluar di navbar; badge jumlah item keranjang.
+- [x] Backend: izinkan CORS origin web + `trustedOrigins` (Better Auth) + `WEB_URL` di env. → cookie cross-origin `localhost:3000 → :8787` berfungsi.
 
 **Checkpoint:**
 
-- [ ] Bisa browse → buka detail → add to cart → lihat cart di UI.
-- [ ] Ganti currency → harga berubah sesuai API.
+- [x] Bisa browse → buka detail → add to cart → lihat cart di UI. → diuji E2E (Playwright): home → produk → detail → login → add → cart tampil `Rp 750.000`.
+- [x] Ganti currency → harga berubah sesuai API. → USD `$75.00`; nilai UI == hasil `GET /cart?currency=USD`.
 
 **Belajar:** Next.js routing, server vs client component, fetch ke API, state management sederhana.
 
