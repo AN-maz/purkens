@@ -1,18 +1,9 @@
 import { Hono } from "hono";
 import { and, asc, eq } from "drizzle-orm";
 import { cartItems, carts, createDb, productPrices, products } from "../db";
+import { parseCurrency, type Currency } from "../lib/currency";
 import { requireAuth, type Variables } from "../middleware/auth";
 import type { Env } from "../env";
-
-const CURRENCIES = ["IDR", "USD"] as const;
-type Currency = (typeof CURRENCIES)[number];
-
-function parseCurrency(value: string | undefined): Currency | null {
-  const currency = (value ?? "IDR").toUpperCase();
-  return CURRENCIES.includes(currency as Currency)
-    ? (currency as Currency)
-    : null;
-}
 
 type Db = ReturnType<typeof createDb>;
 type Cart = typeof carts.$inferSelect;

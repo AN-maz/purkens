@@ -224,3 +224,84 @@ export const addresses = sqliteTable(
     index("addresses_user_default_idx").on(table.userId, table.isDefault),
   ],
 );
+
+// --- Orders (snapshot transaksi) ---
+// Harga & alamat disimpan sebagai snapshot agar riwayat order tidak berubah
+// walau produk atau alamat diubah setelahnya.
+
+export const orderStatuses = [
+  "PENDING_PAYMENT",
+  "PAID",
+  "PROCESSING",
+  "SHIPPED",
+  "COMPLETED",
+  "CANCELLED",
+] as const;
+
+export type OrderStatus = (typeof orderStatuses)[number];
+
+export type ShippingAddressSnapshot = {
+  label: string;
+  recipientName: string;
+  phone: string;
+  addressLine: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  country: string;
+  countryCode: string;
+};
+
+export const orders = sqliteTable(
+  "orders",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    orderNumber: text("order_number").notNull().unique(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    currency: text("currency", { enum: ["IDR", "USD"] }).notNull(),
+    subtotal: integer("subtotal").notNull(),
+    shippingFee: integer("shipping_fee").notNull().default(0),
+    tax: integer("tax").notNull().default(0),
+    discount: integer("discount").notNull().default(0),
+    total: integer("total").notNull(),
+    status: text("status", { enum: orderStatuses })
+      .notNull()
+      .default("PENDING_PAYMENT"),
+    shippingAddressSnapshot: text("shipping_address_snapshot", { mode: "json" })
+      .$type<ShippingAddressSnapshot>()
+      .notNull(),
+    ...timestamps,
+  },
+  (table) => [
+    index("orders_user_id_idx").on(table.userId),
+    index("orders_status_idx").on(table.status),
+  ],
+);
+
+export const orderItems = sqliteTable(
+  "order_items",
+  {
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
+    orderId: text("order_id")
+      .notNull()
+      .references(() => orders.id, { onDelete: "cascade" }),
+    // product_id nullable: order tetap valid walau produk dihapus (snapshot name).
+    productId: text("product_id").references(() => products.id, {
+      onDelete: "set null",
+    }),
+    productName: text("product_name").notNull(),
+    unitPrice: integer("unit_price").notNull(),
+    quantity: integer("quantity").notNull(),
+    subtotal: integer("subtotal").notNull(),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (table) => [index("order_items_order_id_idx").on(table.orderId)],
+);
