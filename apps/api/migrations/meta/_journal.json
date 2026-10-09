@@ -8,6 +8,13 @@
       "when": 1791540271131,
       "tag": "0000_unknown_bedlam",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1791546109303,
+      "tag": "0001_zippy_hitman",
+      "breakpoints": true
     }
   ]
 }
