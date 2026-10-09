@@ -1,0 +1,9 @@
+name = "bukens-api"
+main = "src/index.ts"
+compatibility_date = "2026-10-09"
+
+# D1 database — diaktifkan di Fase 2
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "bukens-db"
+# database_id = "<isi-setelah-wrangler-d1-create>"
