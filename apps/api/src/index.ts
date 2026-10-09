@@ -4,6 +4,7 @@ import { sql } from "drizzle-orm";
 import { createAuth } from "./auth";
 import { createDb, products } from "./db";
 import type { Env } from "./env";
+import { addressRoutes } from "./routes/addresses";
 import { adminRoutes } from "./routes/admin";
 import { cartRoutes } from "./routes/cart";
 import { meRoutes } from "./routes/me";
@@ -34,6 +35,7 @@ app.get("/health/db", async (c) => {
 
 app.route("/products", productRoutes);
 app.route("/cart", cartRoutes);
+app.route("/addresses", addressRoutes);
 app.route("/me", meRoutes);
 app.route("/admin", adminRoutes);
 
