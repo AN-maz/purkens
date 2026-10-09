@@ -20,7 +20,8 @@ Semua dokumen perencanaan ada di [`docs/`](./docs):
 ```text
 bukens/
 ├── apps/
-│   └── api/          # Hono + Cloudflare Worker
+│   ├── api/          # Hono + Cloudflare Worker
+│   └── web/          # Next.js (UI)
 ├── docs/             # dokumen perencanaan
 └── README.md
 ```
@@ -41,3 +42,15 @@ Perintah lain:
 npm run typecheck   # cek tipe TypeScript
 npm run deploy      # deploy ke Cloudflare Workers
 ```
+
+## Menjalankan Web (UI)
+
+Jalankan API dulu, lalu di terminal lain:
+
+```bash
+cd apps/web
+npm install
+npm run dev
+```
+
+Buka `http://localhost:3000`. Lihat [`docs/README.draft.md`](./docs/README.draft.md) untuk detail (env, perintah DB, endpoint).

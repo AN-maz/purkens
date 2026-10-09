@@ -12,13 +12,18 @@ import { productRoutes } from "./routes/products";
 
 const app = new Hono<{ Bindings: Env }>();
 
-// Better Auth handler (register, login, logout, session) di /api/auth/*
-app.use("/api/auth/*", (c, next) =>
+// CORS: izinkan web (WEB_URL) dan baseURL sendiri, dengan cookie.
+app.use("*", (c, next) =>
   cors({
-    origin: (origin) => origin,
+    origin: (origin) =>
+      origin === c.env.WEB_URL || origin === c.env.BETTER_AUTH_URL
+        ? origin
+        : undefined,
     credentials: true,
   })(c, next),
 );
+
+// Better Auth handler (register, login, logout, session) di /api/auth/*
 app.all("/api/auth/*", (c) => createAuth(c.env).handler(c.req.raw));
 
 app.get("/health", (c) => {
