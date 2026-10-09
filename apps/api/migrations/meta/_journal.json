@@ -15,6 +15,13 @@
       "when": 1791546109303,
       "tag": "0001_zippy_hitman",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1791558058006,
+      "tag": "0002_fine_junta",
+      "breakpoints": true
     }
   ]
 }
